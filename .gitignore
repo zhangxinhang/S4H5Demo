@@ -1,0 +1,8 @@
+/build/
+/.gradle/
+/bin/
+/src/main/webapp/WEB-INF/classes
+/.idea/
+/.settings/
+
+.classpath

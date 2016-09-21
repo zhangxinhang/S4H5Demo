@@ -1,0 +1,106 @@
+buildscript {
+    repositories {
+    	 jcenter()
+    }
+
+    dependencies {
+        classpath 'org.akhikhl.gretty:gretty:1.4.0'
+    }
+}
+
+// 设置默认环境变量，默认为开发模式
+if (!project.hasProperty("env")) {
+   project.ext.set("env", "main")
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.akhikhl.gretty'
+
+tasks.withType(JavaCompile) {  
+ 	sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    options.encoding = "UTF-8"  
+} 
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+ }
+
+// JDK version source compatibility
+sourceCompatibility = 1.8
+// project version
+version = '0.0.1'
+// War file name
+war.baseName = 'S4H5'
+
+repositories {
+	flatDir { dirs "libs" }
+	maven {    	
+        url "http://maven.aliyun.com/nexus/content/groups/public"
+    }
+   	mavenLocal()
+    maven {    	
+        url "http://svn.etena.cn:8081/content/groups/public/"
+    }
+    maven {    	
+        url "http://repository.ow2.org/nexus/content/repositories/public/"
+    }
+}
+
+// Set source directory
+sourceSets {
+	main {
+		java {
+            srcDirs = ['src/main/java']
+        }
+    	println '****************'+'src/'+env+'/resources'+'****************'
+    	resources {
+            srcDir 'src/'+env+'/resources'
+        }
+    }
+}
+project.ext.set("springVersion", "4.3.3.RELEASE")
+project.ext.set("hibernateVersion", "5.2.2.Final")
+project.ext.set("aspectjVersion", "1.8.9")
+
+dependencies {
+    compile fileTree(dir:"libs",include:"*.jar")
+    compile "org.apache.logging.log4j:log4j-core:2.3"
+    compile "org.springframework:spring-core:$springVersion"
+    compile "org.springframework:spring-web:$springVersion"
+    compile "org.springframework:spring-webmvc:$springVersion"
+    compile "org.springframework:spring-tx:$springVersion"
+    compile "org.springframework:spring-orm:$springVersion"
+    compile "com.alibaba:fastjson:1.2.17"
+    compile "com.alibaba:druid:1.0.26"
+    compile "org.aspectj:aspectjrt:$aspectjVersion"
+    compile "org.aspectj:aspectjweaver:$aspectjVersion"
+    compile "org.hibernate:hibernate-core:$hibernateVersion"
+    compile "mysql:mysql-connector-java:5.1.36"
+    providedCompile 'javax.servlet:javax.servlet-api:4.+'
+    testCompile	"junit:junit:4.9",
+            "org.springframework:spring-test:$springVersion"
+}
+
+// 拷贝数据源配置
+task copyContext(type: Copy) {
+    from 'src/'+env+'/resources/context.xml'
+    into 'src/main/webapp/META-INF'
+}
+
+/****引入gretty插件*****************/
+gretty {
+    port = 8080
+    servletContainer = 'tomcat8'
+    contextPath ="/"
+    enableNaming=true //启用JNDI
+    managedClassReload=true
+}
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.0'
+}
