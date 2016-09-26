@@ -67,7 +67,7 @@ sourceSets {
 project.ext.set("springVersion", "4.3.3.RELEASE")
 project.ext.set("hibernateVersion", "5.2.2.Final")
 project.ext.set("aspectjVersion", "1.8.9")
-
+project.ext.set("springfoxVersion", "2.5.0")
 dependencies {
     compile fileTree(dir:"libs",include:"*.jar")
     compile "org.apache.logging.log4j:log4j-core:2.3"
@@ -82,6 +82,13 @@ dependencies {
     compile "org.aspectj:aspectjweaver:$aspectjVersion"
     compile "org.hibernate:hibernate-core:$hibernateVersion"
     compile "mysql:mysql-connector-java:5.1.36"
+    compile "io.springfox:springfox-swagger2:$springfoxVersion"
+    compile "io.springfox:springfox-bean-validators:$springfoxVersion"
+    compile "io.springfox:springfox-swagger-ui:$springfoxVersion"
+   	compile('com.fasterxml.jackson.core:jackson-core:2.7.2')
+	compile('com.fasterxml.jackson.core:jackson-databind:2.7.2')
+	compile('com.fasterxml.jackson.core:jackson-annotations:2.7.2')
+	compile group: 'javax.validation', name: 'validation-api', version: '1.0.0.GA'
     providedCompile 'javax.servlet:javax.servlet-api:4.+'
     testCompile	"junit:junit:4.9",
             "org.springframework:spring-test:$springVersion"

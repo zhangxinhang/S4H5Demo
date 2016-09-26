@@ -18,9 +18,10 @@ public class MainController {
 	@Resource
 	private UserBiz userBiz;
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/hello", method = RequestMethod.GET)
+	@ResponseBody
 	public String index() {
-		return "index";
+		return "world";
 	}
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
